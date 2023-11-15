@@ -1,4 +1,6 @@
 using Net_Ecommerce;
+using Net_Ecommerce.Data;
+using Net_Ecommerce.Data.Seeds;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,10 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    using var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
+    using var ctx = scope.ServiceProvider.GetRequiredService<NetCommerceDbContext>();
+    await ctx.Database.EnsureCreatedAsync();
+    await ctx.Initialize();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
