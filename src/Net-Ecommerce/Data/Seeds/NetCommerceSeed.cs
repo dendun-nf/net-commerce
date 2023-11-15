@@ -11,7 +11,7 @@ public static class NetCommerceSeed
         var migrationHistories = ctx.Database.GetService<IMigrationsAssembly>().Migrations.Select(m => m.Key);
         var appliedMigrations = ctx.Database.GetService<IHistoryRepository>().GetAppliedMigrations().Select(m => m.MigrationId);
 
-        if(!migrationHistories.Except(appliedMigrations).Any())
+        if(migrationHistories.Except(appliedMigrations).Any())
         {
             await ctx.Database.MigrateAsync();
             await ctx.Seed();
