@@ -9,6 +9,10 @@ public static class ServiceCollection
     public static IServiceCollection AddNetCommerceService(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<NetCommerceDbContext>(o => o.UseSqlite(configuration.GetConnectionString("NetCommerce")));
+        services.AddMediatR(conf => 
+        {
+           conf.RegisterServicesFromAssemblyContaining<Program>(); 
+        });
 
         services.AddScoped<UserByIdHandler>();
         return services;
