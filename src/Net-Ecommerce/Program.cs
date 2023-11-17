@@ -20,7 +20,6 @@ if (app.Environment.IsDevelopment())
     {
         using var scope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
         using var ctx = scope.ServiceProvider.GetRequiredService<NetCommerceDbContext>();
-        await ctx.Database.EnsureCreatedAsync();
         await ctx.Initialize();
         await ctx.Seed();
     }

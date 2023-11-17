@@ -1,3 +1,5 @@
+using Net_Ecommerce.Features.Sellers;
+
 namespace Net_Ecommerce.Features.Products;
 
 public class Product
@@ -10,9 +12,26 @@ public class Product
         Price = price;
     }
 
-    public Guid Id { get; set; }
-    public string Name { get; }
-    public string Description { get; }
-    public int Stock { get; }
-    public decimal Price { get; }
+    public Guid Id { get; }
+    public Guid SellerId { get; }
+    public string Name { get; private set; }
+    public string Description { get; private set; }
+    public int Stock { get; private set; }
+    public decimal Price { get; private set; }
+
+    internal void ChangeComponents(string name, string description, int stock, decimal price)
+    {
+        Name = name;
+        Description = description;
+        Stock = stock;
+        Price = price;
+    }
+
+
+#pragma warning disable
+    private Product()
+    {
+        
+    }
+#pragma warning restore
 }

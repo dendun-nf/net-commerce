@@ -17,6 +17,7 @@ public class ProductByIdHandler : IRequestHandler<ProductByIdRequest, ProductRes
     {
         var product = await _ctx.Products.SingleAsync(p => p.Id == request.Id);
 
-        return new(product.Name, product.Description, product.Stock, product.Price);
+        // need mapper
+        return new(product.Id, product.SellerId, product.Name, product.Description, product.Stock, product.Price);
     }
 }

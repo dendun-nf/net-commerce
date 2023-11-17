@@ -1,11 +1,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Net_Ecommerce.Features.Products;
+using Net_Ecommerce.Features.Sellers;
 using Net_Ecommerce.Features.Users;
 
 namespace Net_Ecommerce.Data.Seeds;
 
+
+// NEED REFACTOR DEFINETLY
 public static class NetCommerceSeed
 {
     public static async Task Initialize(this NetCommerceDbContext ctx)
@@ -27,12 +29,13 @@ public static class NetCommerceSeed
             switch (table)
             {
                 case "Users":
-                    if(!await ctx.Set<User>().AnyAsync())
-                        await ctx.Set<User>().AddRangeAsync(UserSeed.Users);
+                    await SeedUserIfNone(ctx);
                     break;
                 case "Products":
-                    if(!await ctx.Set<Product>().AnyAsync())
-                        await ctx.Set<Product>().AddRangeAsync(ProductSeed.Products);
+                    await SeedProducts(ctx);
+                    break;
+                case "Sellers":
+                    await SeedSellerIfNone(ctx);
                     break;
                 default:
                     throw new Exception("Tables didn't exist");
@@ -41,4 +44,30 @@ public static class NetCommerceSeed
         
         await ctx.SaveChangesAsync();
     }
+
+    private static async Task SeedSellerIfNone(NetCommerceDbContext ctx)
+    {
+        // if none on db and no local changed on ef core tracking
+        if(!await ctx.Set<Seller>().AnyAsync() && ctx.Set<Seller>().Local.Count == 0)
+            await ctx.Set<Seller>().AddRangeAsync(SellerSeed.Sellers);
+    }
+
+    private static async Task SeedUserIfNone(NetCommerceDbContext ctx)
+    {
+        if(!await ctx.Set<User>().AnyAsync())
+            await ctx.Set<User>().AddRangeAsync(UserSeed.Users);
+    }
+
+    private static async Task SeedProducts(NetCommerceDbContext ctx)
+    {
+        var sellers = ctx.Set<Seller>().Local;
+        if(!sellers.Any()) await SeedSellerIfNone(ctx);
+
+        foreach (var seller in sellers)
+        {
+            seller.AddProducts(ProductSeed.Products);
+        }
+    }
+
+    
 }
