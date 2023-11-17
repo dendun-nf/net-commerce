@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Net_Ecommerce.Data;
 
@@ -10,9 +11,11 @@ using Net_Ecommerce.Data;
 namespace Net_Ecommerce.Migrations
 {
     [DbContext(typeof(NetCommerceDbContext))]
-    partial class NetCommerceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231115223735_AddProducts")]
+    partial class AddProducts
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.14");
@@ -34,36 +37,12 @@ namespace Net_Ecommerce.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<Guid>("SellerId")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("Stock")
                         .HasColumnType("unsigned int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("SellerId");
-
                     b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("Net_Ecommerce.Features.Sellers.Seller", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("varchar(100)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("varchar(25)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Sellers");
                 });
 
             modelBuilder.Entity("Net_Ecommerce.Features.Users.User", b =>
@@ -83,20 +62,6 @@ namespace Net_Ecommerce.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("Net_Ecommerce.Features.Products.Product", b =>
-                {
-                    b.HasOne("Net_Ecommerce.Features.Sellers.Seller", null)
-                        .WithMany("Products")
-                        .HasForeignKey("SellerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Net_Ecommerce.Features.Sellers.Seller", b =>
-                {
-                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }
