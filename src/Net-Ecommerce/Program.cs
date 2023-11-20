@@ -1,6 +1,7 @@
 using Net_Ecommerce;
 using Net_Ecommerce.Data;
 using Net_Ecommerce.Data.Seeds;
+using Net_Ecommerce.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,9 +25,12 @@ if (app.Environment.IsDevelopment())
         await ctx.Seed();
     }
 
+    // app.UseExceptionHandler("/dev-error");
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.UseMiddleware<CustomExceptionHandlerMiddleware>();
 
 app.UseHttpsRedirection();
 
