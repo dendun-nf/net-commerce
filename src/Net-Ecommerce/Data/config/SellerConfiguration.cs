@@ -17,5 +17,8 @@ public class SellerConfiguration : IEntityTypeConfiguration<Seller>
             .WithOne()
             .HasForeignKey(s => s.SellerId);
 
+        builder.HasMany(s => s.Orders)
+            .WithOne(o => o.Seller)
+            .HasForeignKey(s => s.SellerId);
     }
 }
