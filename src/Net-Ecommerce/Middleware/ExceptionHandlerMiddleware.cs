@@ -47,10 +47,11 @@ public class CustomExceptionHandlerMiddleware
             problemDetails.Type = e.GetType().Name;
             problemDetails.Detail = e.Message;
             problemDetails.Extensions.Add("traceId", context.TraceIdentifier);
+            
+            context.Response.ContentType = "application/problem+json";
+            context.Response.StatusCode = errorCode;
+            await context.Response.WriteAsJsonAsync(problemDetails);
         }
 
-        context.Response.ContentType = "application/problem+json";
-        context.Response.StatusCode = errorCode;
-        await context.Response.WriteAsJsonAsync(problemDetails);
     }
 }
