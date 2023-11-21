@@ -27,6 +27,9 @@ public class Product
         Price = price;
     }
 
+    public void DecresaseStock(int num) => Stock -= num;
+    public void IncreaseStock(int num) => Stock += num;
+
 
 #pragma warning disable
     private Product()
