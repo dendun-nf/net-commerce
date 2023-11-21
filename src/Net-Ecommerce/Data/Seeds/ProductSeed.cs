@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Net_Ecommerce.Features.Products;
 
 namespace Net_Ecommerce.Data.Seeds;
@@ -18,4 +19,23 @@ public static class ProductSeed
         new("twelve", "swam condition quite solve close large ten interior me excited ants feathers law handsome whose green drive someone nature drink lesson happily energy dirty", 62, 46.9641m),
         new("pony", "widely hurt influence system previous forgotten done up stranger parallel desk equal connected factory understanding warm selection got milk sight bottle replace ear familiar", 86, 69.5489m),
     };
+
+    public static async Task Seed(NetCommerceDbContext ctx)
+    {
+        // products already filled, return
+        if(await ctx.Products.AnyAsync() || ctx.Products.Local.Count > 0)
+            return;
+            
+        // if seller none on db and none on local seed seller
+        if(!await ctx.Sellers.AnyAsync() && ctx.Sellers.Local.Count <= 0)
+            await SellerSeed.Seed(ctx);
+
+        var sellers = await ctx.Sellers.ToListAsync();
+        sellers = sellers.Count > 0 ? sellers : ctx.Sellers.Local.ToList();
+
+        foreach (var seller in sellers)
+        {
+            seller.AddProducts(Products);
+        }
+    }
 }

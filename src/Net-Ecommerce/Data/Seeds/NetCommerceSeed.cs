@@ -29,44 +29,20 @@ public static class NetCommerceSeed
             switch (table)
             {
                 case "Users":
-                    await SeedUserIfNone(ctx);
+                    await UserSeed.Seed(ctx);
                     break;
                 case "Products":
-                    await SeedProducts(ctx);
+                    await ProductSeed.Seed(ctx);
                     break;
                 case "Sellers":
-                    await SeedSellerIfNone(ctx);
+                    await SellerSeed.Seed(ctx);
                     break;
                 default:
-                    throw new Exception("Tables didn't exist");
+                    continue;
             }   
         }
         
         await ctx.SaveChangesAsync();
-    }
-
-    private static async Task SeedSellerIfNone(NetCommerceDbContext ctx)
-    {
-        // if none on db and no local changed on ef core tracking
-        if(!await ctx.Set<Seller>().AnyAsync() && ctx.Set<Seller>().Local.Count == 0)
-            await ctx.Set<Seller>().AddRangeAsync(SellerSeed.Sellers);
-    }
-
-    private static async Task SeedUserIfNone(NetCommerceDbContext ctx)
-    {
-        if(!await ctx.Set<User>().AnyAsync())
-            await ctx.Set<User>().AddRangeAsync(UserSeed.Users);
-    }
-
-    private static async Task SeedProducts(NetCommerceDbContext ctx)
-    {
-        var sellers = ctx.Set<Seller>().Local;
-        if(!sellers.Any()) await SeedSellerIfNone(ctx);
-
-        foreach (var seller in sellers)
-        {
-            seller.AddProducts(ProductSeed.Products);
-        }
     }
 
     
