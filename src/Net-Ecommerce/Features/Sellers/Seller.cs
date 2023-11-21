@@ -1,3 +1,4 @@
+using Net_Ecommerce.Features.Orders;
 using Net_Ecommerce.Features.Products;
 
 namespace Net_Ecommerce.Features.Sellers;
@@ -16,6 +17,10 @@ public class Seller
 
     private readonly List<Product> _products = new();
     public IEnumerable<Product> Products => _products.AsReadOnly();
+
+    private readonly List<Order> _orders = new();
+    public IEnumerable<Order> Orders => _orders.AsReadOnly();
+
     public void AddProduct(Product product) => _products.Add(product);
     public void AddProducts(IEnumerable<Product> products) => _products.AddRange(products);
     public void RemoveProduct(Guid id) 

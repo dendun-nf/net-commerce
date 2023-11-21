@@ -1,6 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Net_Ecommerce.Features.Sellers.GetById;
+using Net_Ecommerce.Features.Sellers.GetOrderById;
+using Net_Ecommerce.Features.Sellers.GetOrders;
 
 namespace Net_Ecommerce.Controllers;
 
@@ -18,6 +20,22 @@ public class SellerController : ControllerBase
 
     [HttpGet("{request.Id:guid}")]
     public async Task<IActionResult> Get([FromRoute] SellerByIdRequest request, CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(request, cancellationToken);
+        
+        return Ok(result);
+    }
+
+    [HttpGet("{request.SellerId:guid}/orders")]
+    public async Task<IActionResult> GetOrders([FromRoute] OrdersBySellerRequest request, CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(request, cancellationToken);
+        
+        return Ok(result);
+    }
+
+    [HttpGet("{request.SellerId:guid}/orders/{request.OrderId:guid}")]
+    public async Task<IActionResult> GetOrder([FromRoute] SellerOrderByIdRequest request, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(request, cancellationToken);
         
