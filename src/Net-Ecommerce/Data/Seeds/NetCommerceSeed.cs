@@ -37,6 +37,11 @@ public static class NetCommerceSeed
                 case "Sellers":
                     await SellerSeed.Seed(ctx);
                     break;
+                case "Orders":
+                    await OrderSeed.Seed(ctx);
+                    break;
+                case "OrdersDetail":
+                    break;
                 default:
                     continue;
             }   
