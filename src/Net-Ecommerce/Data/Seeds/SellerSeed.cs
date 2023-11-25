@@ -23,12 +23,11 @@ public static class SellerSeed
         new("Mildred72", "to@oluta.kh"),
     };
 
-    public static async Task AssignProductsToSellers(NetCommerceDbContext ctx)
+    public static async Task Seed(NetCommerceDbContext ctx)
     {
-        var sellers = await ctx.Sellers.ToListAsync();
-        foreach (var seller in sellers)
-        {
-            seller.AddProducts(ProductSeed.Products);
-        }
+        if(!await ctx.Sellers.AnyAsync() && ctx.Sellers.Local.Count <= 0)
+            await ctx.Sellers.AddRangeAsync(Sellers);
     }
+
+
 }

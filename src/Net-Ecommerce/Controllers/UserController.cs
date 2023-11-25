@@ -1,6 +1,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Net_Ecommerce.Features.Users.GetById;
+using Net_Ecommerce.Features.Users.GetOrderById;
+using Net_Ecommerce.Features.Users.GetOrders;
 
 namespace Net_Ecommerce.Controllers;
 
@@ -16,6 +18,24 @@ public class UserController : ControllerBase
     [HttpGet("{request.Id:guid}", Name = "GetUser", Order = 0)]
     public async Task<IActionResult> Get(
         [FromRoute] UserByIdRequest request, 
+        CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(request, cancellationToken);
+        return Ok(result);
+    }
+
+    [HttpGet("orders")]
+    public async Task<IActionResult> GetOrders(
+        [FromQuery] OrdersByUserRequest request, 
+        CancellationToken cancellationToken)
+    {
+        var result = await _sender.Send(request, cancellationToken);
+        return Ok(result);
+    }
+
+    [HttpGet("{request.UserId:guid}/orders/{request.OrderId:guid}")]
+    public async Task<IActionResult> GetOrder(
+        [FromRoute] UserOrderByIdRequest request, 
         CancellationToken cancellationToken)
     {
         var result = await _sender.Send(request, cancellationToken);

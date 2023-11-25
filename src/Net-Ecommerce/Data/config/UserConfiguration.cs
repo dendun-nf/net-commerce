@@ -11,5 +11,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         builder.HasKey(u => u.Id); {builder.Property(u => u.Id).ValueGeneratedOnAdd(); }
         builder.Property(u => u.Username).HasColumnType("varchar(25)");
         builder.Property(u => u.Email).HasColumnType("varchar(100)");
+
+        builder.HasMany(u => u.Orders)
+            .WithOne(o => o.User)
+            .HasForeignKey(u => u.UserId);
     }
 }
