@@ -24,9 +24,9 @@ public class UserController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("{request.UserId:guid}/orders")]
+    [HttpGet("orders")]
     public async Task<IActionResult> GetOrders(
-        [FromRoute] OrdersByUserRequest request, 
+        [FromQuery] OrdersByUserRequest request, 
         CancellationToken cancellationToken)
     {
         var result = await _sender.Send(request, cancellationToken);
