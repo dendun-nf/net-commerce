@@ -26,8 +26,8 @@ public class SellerController : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("{request.SellerId:guid}/orders")]
-    public async Task<IActionResult> GetOrders([FromRoute] OrdersBySellerRequest request, CancellationToken cancellationToken)
+    [HttpGet("orders")]
+    public async Task<IActionResult> GetOrders([FromQuery] OrdersBySellerRequest request, CancellationToken cancellationToken)
     {
         var result = await _sender.Send(request, cancellationToken);
         
